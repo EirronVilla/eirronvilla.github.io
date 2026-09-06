@@ -101,7 +101,7 @@ Los puntos que pertenecen al conjunto aparecen en negro. Para los demás, podemo
 
 El resultado es algo fascinante.
 
-Existen videos de personas “explorando” este fractal durante horas. Cada nueva ruta revela patrones y figuras visualmente impresionantes. Algunas parecen hojas o ramas de árboles. Otras parecen descargas eléctricas, células, organismos o estructuras completamente extrañas.
+Existen videos en [YouTube](https://www.youtube.com/watch?v=pCpLWbHVNhk&list=PLKHNByHfHxT6MRKBPaoQqVJcIat-A6FVU&index=2) de personas “explorando” este fractal durante horas. Cada nueva ruta revela patrones y figuras visualmente impresionantes. Algunas parecen hojas o ramas de árboles. Otras parecen descargas eléctricas, células, organismos o estructuras completamente extrañas.
 
 Y algunas son, simple y sencillamente, psicodélicas, hermosas e impresionantes de observar.
 
