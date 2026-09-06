@@ -16,6 +16,17 @@ const MAX_RENDER_PIXELS = 2_000_000;
 
 let renderId = 0;
 let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+let initialRenderComplete = false;
+
+const hero = canvas.closest<HTMLElement>(".hero");
+const navigation = document.querySelector<HTMLElement>(".site-header");
+
+function updateHeroHeight() {
+    if (!hero) return;
+
+    const navigationHeight = navigation?.getBoundingClientRect().height ?? 0;
+    hero.style.setProperty("--navigation-height", `${navigationHeight}px`);
+}
 
 /**
  * Pick a new view near one of several interesting points on the boundary.
@@ -118,46 +129,70 @@ function renderMandelbrot() {
     const spanReal = spanImaginary * (width / height);
     const minReal = visualizationArea.centerReal - spanReal / 2;
     const maxImaginary = visualizationArea.centerImaginary + spanImaginary / 2;
-    const image = ctx.createImageData(width, height);
     const currentRenderId = ++renderId;
-    let y = 0;
+    const totalPixels = width * height;
+    const image = ctx.createImageData(width, height);
+    const progress = document.querySelector<HTMLElement>(".fractal-progress");
+    const progressLabel = progress?.querySelector<HTMLElement>("b");
 
-    // Render in slices so a large canvas does not freeze the page.
-    function renderSlice() {
+    // Begin with an entirely white field. Pixels are then calculated in a
+    // deterministic scattered order so the image gathers like particles.
+    image.data.fill(255);
+    ctx.putImageData(image, 0, 0);
+
+    function greatestCommonDivisor(a: number, b: number) {
+        while (b !== 0) [a, b] = [b, a % b];
+        return a;
+    }
+
+    let step = Math.max(1, Math.floor(totalPixels * 0.61803398875)) | 1;
+    while (greatestCommonDivisor(step, totalPixels) !== 1) step += 2;
+
+    const offset = Math.floor(Math.random() * totalPixels);
+    let completedPixels = 0;
+    let lastPaint = 0;
+
+    function renderParticles(timestamp: number) {
         if (currentRenderId !== renderId) return;
 
-        const deadline = performance.now() + 12;
-        const firstRow = y;
-        while (y < height && performance.now() < deadline) {
+        const deadline = performance.now() + 11;
+        while (completedPixels < totalPixels && performance.now() < deadline) {
+            const pixel = (offset + completedPixels * step) % totalPixels;
+            const x = pixel % width;
+            const y = Math.floor(pixel / width);
+            const cReal = minReal + (x / width) * spanReal;
             const cImaginary = maxImaginary - (y / height) * spanImaginary;
+            const result = mandelbrotIterations(cReal, cImaginary);
+            const brightness = getSmoothGrayscale(result.iterations, result.magnitudeSquared);
+            const pixelIndex = pixel * 4;
 
-            for (let x = 0; x < width; x++) {
-                const cReal = minReal + (x / width) * spanReal;
-                const result = mandelbrotIterations(cReal, cImaginary);
-                const brightness = getSmoothGrayscale(
-                    result.iterations,
-                    result.magnitudeSquared
-                );
-                const pixelIndex = (y * width + x) * 4;
+            image.data[pixelIndex] = brightness;
+            image.data[pixelIndex + 1] = brightness;
+            image.data[pixelIndex + 2] = brightness;
+            completedPixels++;
+        }
 
-                image.data[pixelIndex] = brightness;
-                image.data[pixelIndex + 1] = brightness;
-                image.data[pixelIndex + 2] = brightness;
-                image.data[pixelIndex + 3] = 255;
+        if (timestamp - lastPaint > 32 || completedPixels === totalPixels) {
+            ctx.putImageData(image, 0, 0);
+            lastPaint = timestamp;
+
+            if (!initialRenderComplete && progress) {
+                const percentage = Math.round((completedPixels / totalPixels) * 100);
+                progress.style.setProperty("--fractal-progress", `${percentage}%`);
+                if (progressLabel) progressLabel.textContent = `${percentage}%`;
             }
-            y++;
         }
 
-        if (y > firstRow) {
-            ctx.putImageData(image, 0, 0, 0, firstRow, width, y - firstRow);
-        }
-
-        if (y < height) {
-            requestAnimationFrame(renderSlice);
+        if (completedPixels < totalPixels) {
+            requestAnimationFrame(renderParticles);
+        } else if (!initialRenderComplete) {
+            initialRenderComplete = true;
+            document.documentElement.classList.remove("mandelbrot-generating");
+            document.documentElement.classList.add("mandelbrot-ready");
         }
     }
 
-    requestAnimationFrame(renderSlice);
+    requestAnimationFrame(renderParticles);
 }
 
 const resizeObserver = new ResizeObserver(() => {
@@ -166,4 +201,9 @@ const resizeObserver = new ResizeObserver(() => {
 });
 
 resizeObserver.observe(canvas);
+if (navigation) {
+    const navigationObserver = new ResizeObserver(updateHeroHeight);
+    navigationObserver.observe(navigation);
+}
+updateHeroHeight();
 renderMandelbrot();

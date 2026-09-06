@@ -13,16 +13,15 @@ const articles = [
 ];
 ---
 <!doctype html>
-<html lang="es">
+<html lang="es" class="mandelbrot-generating">
 	<head><BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} /></head>
 	<body>
 		<Header />
 		<main>
 			<section class="hero">
 				<canvas id="hero-mandelbrot" class="mandelbrot-background" aria-hidden="true"></canvas>
-				<p class="aside left">Ideas<br />para un<br />manana<br />mas sereno<i></i></p>
+				<div class="fractal-progress" role="status" aria-live="polite"><span></span><p>Generando perspectiva / <b>0%</b></p></div>
 				<div class="hero-copy"><h1>Vivir<br />mejor.</h1><p>Una mente mas clara</p><a class="pill" href="/blog">Explorar &gt;</a></div>
-				<p class="aside right">Curiosidad<br />humanidad<br />un manana<br />mas amable<i></i></p>
 				<p class="scroll">Desliza</p><div class="slider"><b>01 / 03</b><button aria-label="Anterior">&lt;</button><button aria-label="Siguiente">&gt;</button></div>
 			</section>
 			<section class="block featured">
