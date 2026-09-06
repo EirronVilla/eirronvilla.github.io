@@ -21,13 +21,10 @@ const articles = [
 			<section class="hero">
 				<canvas id="hero-mandelbrot" class="mandelbrot-background" aria-hidden="true"></canvas>
 				<div class="fractal-progress" role="status" aria-live="polite"><span></span><p>Generando perspectiva / <b>0%</b></p></div>
-				<div id="hero-copy" class="hero-copy"><h1 data-adaptive-contrast>Abraza<br />el cambio.</h1><p data-adaptive-contrast>Construye el futuro</p><a class="pill" href="/blog">Explorar &gt;</a></div>
-				<div class="slider">
-					<button id="toggle-hero-text" type="button" role="switch" aria-checked="true" aria-controls="hero-copy"><span class="toggle-track" aria-hidden="true"></span>Mostrar texto</button>
-					<button id="generate-mandelbrot" type="button">Generar nuevo Mandelbrot</button>
-				</div>
+				<div class="hero-copy"><h1 data-adaptive-contrast>Bienvenido a<br />mi espacio.</h1><p data-adaptive-contrast>Para explorar diverso conocimiento</p><a class="pill" href="/about">¿Que es esto?</a></div>
+				<div class="slider"><span data-adaptive-contrast>Generar nuevo Mandelbrot</span><button id="generate-mandelbrot" type="button" data-adaptive-contrast aria-label="Generar nuevo Mandelbrot">&gt;</button></div>
 			</section>
-			<section class="block featured">
+			<section class="block featured" hidden>
 				<div class="heading"><h2>Destacado</h2><a href="/blog">Ver todo &gt;</a></div>
 				<div class="feature-grid">
 					<div class="feature-art"><i></i><span>01</span></div>
@@ -35,7 +32,7 @@ const articles = [
 					<div class="stories"><a href="/blog"><i class="mini blur"></i><span><b>Bienestar</b>El poder de lo esencial</span>&gt;</a><a href="/blog"><i class="mini lines"></i><span><b>Tecnologia</b>Una internet mas humana</span>&gt;</a><a href="/blog"><i class="mini eclipse"></i><span><b>Estilo de vida</b>Rituales para una mente clara</span>&gt;</a></div>
 				</div>
 			</section>
-			<section class="block latest">
+			<section class="block latest" hidden>
 				<div class="heading"><h2>Ultimos articulos</h2><a href="/blog">Ver todo &gt;</a></div>
 				<div class="cards">{articles.map(([category, title, date, time, art]) => <article><a class={`art ${art}`} href="/blog"><i></i></a><p class="label">{category}</p><h3><a href="/blog">{title}</a></h3><p class="meta">{date} / {time}</p></article>)}</div>
 			</section>
