@@ -1,12 +1,16 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import { getEntry, render } from 'astro:content';
+import BlogPost from '../layouts/BlogPost.astro';
+
+const about = await getEntry('blog', 'about');
+
+if (!about) {
+	throw new Error('No se encontro el contenido src/content/blog/about.md');
+}
+
+const { Content } = await render(about);
 ---
 
-<Layout title="Acerca de NOVA" description="Un espacio para pensar con calma y vivir con mayor claridad." pubDate={new Date('2021-08-08')} heroImage={AboutHeroImage}>
-	<p>NOVA es una publicacion independiente sobre bienestar, perspectiva, tecnologia y cultura. Nacio de una pregunta sencilla: como podemos construir una vida mas consciente sin alejarnos del mundo que compartimos.</p>
-	<p>Aqui exploramos ideas que ayudan a reducir el ruido y recuperar la atencion. Nos interesan los pequenos rituales, las conversaciones honestas y las herramientas que hacen que el futuro se sienta un poco mas humano.</p>
-	<h2>Nuestra mirada</h2>
-	<p>Creemos que la claridad no llega al acelerar, sino al observar mejor. Cada articulo busca ofrecer una pausa util: una idea que puedas llevar contigo y convertir en una forma distinta de mirar tu dia.</p>
-	<p>Gracias por leer y por hacer espacio para una manera mas serena de estar presente.</p>
-</Layout>
+<BlogPost {...about.data}>
+	<Content />
+</BlogPost>

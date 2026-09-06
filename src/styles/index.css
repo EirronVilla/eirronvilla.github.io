@@ -60,7 +60,7 @@ a {
 /* Header and primary navigation
    -------------------------------------------------------------------------- */
 
-header {
+.site-header {
   height: 72px;
   padding: 0 4.9%;
   display: flex;
@@ -79,11 +79,11 @@ header {
   text-decoration: none;
 }
 
-header small,footer small {
+.site-header small,footer small {
   font-size: 12px;
 }
 
-header nav {
+.site-header nav {
   margin-left: auto;
   height: 100%;
   display: flex;
@@ -95,7 +95,7 @@ nav a {
   text-decoration: none;
 }
 
-header nav a {
+.site-header nav a {
   position: relative;
   font-size: 13px;
 }
@@ -625,11 +625,11 @@ footer nav {
    -------------------------------------------------------------------------- */
 
 @media (max-width: 900px) {
-  header small,.search {
+  .site-header small,.search {
     display: none;
   }
 
-  header nav {
+  .site-header nav {
     gap: 18px;
   }
 
@@ -689,7 +689,7 @@ footer nav {
    -------------------------------------------------------------------------- */
 
 @media (max-width: 620px) {
-  header {
+  .site-header {
     height: auto;
     padding: 18px 20px;
     flex-wrap: wrap;
@@ -700,7 +700,7 @@ footer nav {
     min-width: 110px;
   }
 
-  header nav {
+  .site-header nav {
     order: 3;
     width: 100%;
     justify-content: space-between;
