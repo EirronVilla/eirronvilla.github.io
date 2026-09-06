@@ -108,10 +108,26 @@ main {
    -------------------------------------------------------------------------- */
 
 .hero {
-  height: 550px;
+  width: 100%;
+  height: 100vh;
+  min-height: 550px;
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid #ccc;
+}
+
+.mandelbrot-background {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #fafaf8;
+}
+
+.hero > :not(.mandelbrot-background) {
+  z-index: 1;
 }
 
 .aside,.label {
@@ -644,7 +660,8 @@ footer nav {
   }
 
   .hero {
-    height: 510px;
+    height: 100vh;
+    min-height: 510px;
   }
 
   .hero-copy {
