@@ -21,8 +21,11 @@ const articles = [
 			<section class="hero">
 				<canvas id="hero-mandelbrot" class="mandelbrot-background" aria-hidden="true"></canvas>
 				<div class="fractal-progress" role="status" aria-live="polite"><span></span><p>Generando perspectiva / <b>0%</b></p></div>
-				<div class="hero-copy"><h1 data-adaptive-contrast>Bienvenido a<br />mi espacio.</h1><p data-adaptive-contrast>Para explorar diverso conocimiento</p><a class="pill" href="/about">¿Que es esto?</a></div>
-				<div class="slider"><span data-adaptive-contrast>Generar nuevo Mandelbrot</span><button id="generate-mandelbrot" type="button" data-adaptive-contrast aria-label="Generar nuevo Mandelbrot">&gt;</button></div>
+				<div id="hero-copy" class="hero-copy"><h1 data-adaptive-contrast>Bienvenido a<br />mi espacio.</h1><p data-adaptive-contrast>Para explorar diverso conocimiento</p><a class="pill" href="/about">¿Que es esto?</a></div>
+				<div class="slider">
+					<button id="toggle-hero-text" type="button" role="switch" aria-checked="true" aria-controls="hero-copy"><span class="toggle-track" aria-hidden="true"></span>Mostrar texto</button>
+					<button id="generate-mandelbrot" type="button">Generar nuevo Mandelbrot</button>
+				</div>
 			</section>
 			<section class="block featured" hidden>
 				<div class="heading"><h2>Destacado</h2><a href="/blog">Ver todo &gt;</a></div>
