@@ -1,9 +1,8 @@
-```mdx
 ---
 title: "¿Qué es esto?"
 description: "¿Qué es este espacio? ¿Qué deseo lograr con él?."
 author: "Aaron Villalobos"
-date: 2026-09-05
+pubDate: 2026-09-05
 ---
 
 # ¿Qué es esto?
@@ -133,4 +132,3 @@ También espero que el espacio evolucione poco a poco. Que cambie conforme cambi
 De momento, esto es lo que hay.
 
 **Bienvenidos. Espero que les guste.**
-```
