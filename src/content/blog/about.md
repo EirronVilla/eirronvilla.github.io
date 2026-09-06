@@ -25,7 +25,7 @@ Y por esa razón nunca me había dedicado seriamente a explorar esas ideas. No p
 
 No he conocido a mucha gente que esté deseando llegar a casa para seguir programando y viendo código después de un largo día de trabajo haciendo exactamente lo mismo.
 
-Pero recientemente pasó algo muy interesante.
+Recientemente ocurrió una transformación tecnológica muy interesante.
 
 **Los agentes de inteligencia artificial llegaron.**
 
@@ -79,7 +79,7 @@ Pero también representa una oportunidad extraordinaria.
 
 Aquellas personas que se propongan adaptarse al cambio, entender hacia dónde se dirige esta industria y aprender a aprovechar la IA podrían llevar a cabo proyectos sumamente interesantes: ideas que tradicionalmente habrían requerido muchísimo más tiempo debido a su complejidad conceptual o de ejecución.
 
-**Y aquí es donde comienza este experimento.**
+**Por esto he comenzado este experimento.**
 
 ## Caos
 
