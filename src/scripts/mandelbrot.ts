@@ -55,7 +55,36 @@ function randomVisualizationArea() {
 }
 
 // A new area is selected once per page load. Resizing keeps that same view.
-const visualizationArea = randomVisualizationArea();
+let visualizationArea = randomVisualizationArea();
+
+function updateAdaptiveContrast(image: ImageData) {
+    const canvasBounds = canvas.getBoundingClientRect();
+    if (!canvasBounds.width || !canvasBounds.height) return;
+
+    document.querySelectorAll<HTMLElement>("[data-adaptive-contrast]").forEach((element) => {
+        const bounds = element.getBoundingClientRect();
+        const left = Math.max(0, Math.floor((bounds.left - canvasBounds.left) / canvasBounds.width * image.width));
+        const right = Math.min(image.width - 1, Math.ceil((bounds.right - canvasBounds.left) / canvasBounds.width * image.width));
+        const top = Math.max(0, Math.floor((bounds.top - canvasBounds.top) / canvasBounds.height * image.height));
+        const bottom = Math.min(image.height - 1, Math.ceil((bounds.bottom - canvasBounds.top) / canvasBounds.height * image.height));
+
+        let luminance = 0;
+        let samples = 0;
+        const stepX = Math.max(1, Math.floor((right - left) / 24));
+        const stepY = Math.max(1, Math.floor((bottom - top) / 12));
+
+        for (let y = top; y <= bottom; y += stepY) {
+            for (let x = left; x <= right; x += stepX) {
+                luminance += image.data[(y * image.width + x) * 4];
+                samples++;
+            }
+        }
+
+        const useLightText = samples > 0 && luminance / samples < 145;
+        element.style.setProperty("--adaptive-color", useLightText ? "#fff" : "#111");
+        element.style.setProperty("--adaptive-shadow", useLightText ? "rgba(0,0,0,.8)" : "rgba(255,255,255,.85)");
+    });
+}
 
 function mandelbrotIterations(cReal, cImaginary) {
     // Points in the main cardioid or the period-2 bulb cannot escape.
@@ -174,6 +203,7 @@ function renderMandelbrot() {
 
         if (timestamp - lastPaint > 32 || completedPixels === totalPixels) {
             ctx.putImageData(image, 0, 0);
+            updateAdaptiveContrast(image);
             lastPaint = timestamp;
 
             if (!initialRenderComplete && progress) {
@@ -207,3 +237,17 @@ if (navigation) {
 }
 updateHeroHeight();
 renderMandelbrot();
+
+document.querySelector<HTMLButtonElement>("#generate-mandelbrot")?.addEventListener("click", () => {
+    visualizationArea = randomVisualizationArea();
+    initialRenderComplete = false;
+    document.documentElement.classList.remove("mandelbrot-ready");
+    document.documentElement.classList.add("mandelbrot-generating");
+
+    const progress = document.querySelector<HTMLElement>(".fractal-progress");
+    progress?.style.setProperty("--fractal-progress", "0%");
+    const progressLabel = progress?.querySelector<HTMLElement>("b");
+    if (progressLabel) progressLabel.textContent = "0%";
+
+    renderMandelbrot();
+});
