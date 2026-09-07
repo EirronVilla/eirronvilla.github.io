@@ -19,7 +19,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<main class="article-page">
 			<article>
 				<header class="article-heading">
-					<p class="label">Reflexiones para vivir mejor</p><h1>{title}</h1><p class="dek">{description}</p>
+					<p class="label">Blog post</p><h1>{title}</h1><p class="dek">{description}</p>
 					<div class="date"><FormattedDate date={pubDate} />{updatedDate && <span> / Actualizado el <FormattedDate date={updatedDate} /></span>}</div>
 				</header>
 				{heroImage && <div class="hero-image"><Image width={1200} height={600} src={heroImage} alt="" /></div>}
