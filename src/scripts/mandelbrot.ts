@@ -57,6 +57,17 @@ function randomVisualizationArea() {
 // A new area is selected once per page load. Resizing keeps that same view.
 let visualizationArea = randomVisualizationArea();
 
+function updateVisualizationDetails() {
+    const details = document.querySelector<HTMLElement>(".fractal-details");
+    if (!details) return;
+
+    const zoom = 3 / visualizationArea.spanImaginary;
+    const coordinatePrecision = Math.min(12, Math.max(5, Math.ceil(Math.log10(zoom)) + 3));
+    const formattedZoom = new Intl.NumberFormat("es-MX", { maximumFractionDigits: 0 }).format(zoom);
+
+    details.textContent = `Profundidad ${formattedZoom}× · Área x ${visualizationArea.centerReal.toFixed(coordinatePrecision)}, y ${visualizationArea.centerImaginary.toFixed(coordinatePrecision)}`;
+}
+
 function updateAdaptiveContrast(image: ImageData) {
     const canvasBounds = canvas.getBoundingClientRect();
     if (!canvasBounds.width || !canvasBounds.height) return;
@@ -117,14 +128,17 @@ function mandelbrotIterations(cReal, cImaginary) {
     return { iterations: maxIterations, magnitudeSquared: 0 };
 }
 
+function getSmoothIteration(iterations: number, magnitudeSquared: number) {
+    return iterations + 1 - Math.log2(Math.log2(Math.sqrt(magnitudeSquared)));
+}
+
 function getSmoothGrayscale(iterations, magnitudeSquared) {
     if (iterations === maxIterations) {
         return 0;
     }
 
     // Fractional escape counts remove the visible bands between iterations.
-    const smoothIteration =
-        iterations + 1 - Math.log2(Math.log2(Math.sqrt(magnitudeSquared)));
+    const smoothIteration = getSmoothIteration(iterations, magnitudeSquared);
     const normalized = Math.max(0, Math.min(1, smoothIteration / maxIterations));
 
     // Keep the exterior bright while fading continuously toward the black set.
@@ -164,29 +178,21 @@ function renderMandelbrot() {
     const progress = document.querySelector<HTMLElement>(".fractal-progress");
     const progressLabel = progress?.querySelector<HTMLElement>("b");
 
-    // Begin with an entirely white field. Pixels are then calculated in a
-    // deterministic scattered order so the image gathers like particles.
+    // Keep the canvas blank while calculating, then upload the completed image
+    // once. Repeated full-canvas paints were considerably more expensive than
+    // the particle effect was worth.
     image.data.fill(255);
     ctx.putImageData(image, 0, 0);
 
-    function greatestCommonDivisor(a: number, b: number) {
-        while (b !== 0) [a, b] = [b, a % b];
-        return a;
-    }
-
-    let step = Math.max(1, Math.floor(totalPixels * 0.61803398875)) | 1;
-    while (greatestCommonDivisor(step, totalPixels) !== 1) step += 2;
-
-    const offset = Math.floor(Math.random() * totalPixels);
     let completedPixels = 0;
-    let lastPaint = 0;
+    let lastProgressUpdate = 0;
 
     function renderParticles(timestamp: number) {
         if (currentRenderId !== renderId) return;
 
         const deadline = performance.now() + 11;
         while (completedPixels < totalPixels && performance.now() < deadline) {
-            const pixel = (offset + completedPixels * step) % totalPixels;
+            const pixel = completedPixels;
             const x = pixel % width;
             const y = Math.floor(pixel / width);
             const cReal = minReal + (x / width) * spanReal;
@@ -201,11 +207,8 @@ function renderMandelbrot() {
             completedPixels++;
         }
 
-        if (timestamp - lastPaint > 32 || completedPixels === totalPixels) {
-            ctx.putImageData(image, 0, 0);
-            updateAdaptiveContrast(image);
-            lastPaint = timestamp;
-
+        if (timestamp - lastProgressUpdate > 80 || completedPixels === totalPixels) {
+            lastProgressUpdate = timestamp;
             if (!initialRenderComplete && progress) {
                 const percentage = Math.round((completedPixels / totalPixels) * 100);
                 progress.style.setProperty("--fractal-progress", `${percentage}%`);
@@ -215,10 +218,15 @@ function renderMandelbrot() {
 
         if (completedPixels < totalPixels) {
             requestAnimationFrame(renderParticles);
-        } else if (!initialRenderComplete) {
-            initialRenderComplete = true;
-            document.documentElement.classList.remove("mandelbrot-generating");
-            document.documentElement.classList.add("mandelbrot-ready");
+        } else {
+            ctx.putImageData(image, 0, 0);
+            updateAdaptiveContrast(image);
+
+            if (!initialRenderComplete) {
+                initialRenderComplete = true;
+                document.documentElement.classList.remove("mandelbrot-generating");
+                document.documentElement.classList.add("mandelbrot-ready");
+            }
         }
     }
 
@@ -236,10 +244,12 @@ if (navigation) {
     navigationObserver.observe(navigation);
 }
 updateHeroHeight();
+updateVisualizationDetails();
 renderMandelbrot();
 
 document.querySelector<HTMLButtonElement>("#generate-mandelbrot")?.addEventListener("click", () => {
     visualizationArea = randomVisualizationArea();
+    updateVisualizationDetails();
     initialRenderComplete = false;
     document.documentElement.classList.remove("mandelbrot-ready");
     document.documentElement.classList.add("mandelbrot-generating");

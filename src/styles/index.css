@@ -28,9 +28,11 @@ body {
 .fractal-progress {
   position: absolute;
   z-index: 3;
-  left: 4.9%;
-  bottom: 38px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: min(300px, 42vw);
+  text-align: center;
   transition: opacity .45s ease, visibility .45s ease;
 }
 
@@ -56,6 +58,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .hero-copy,.fractal-progress,.fractal-progress span { transition-duration: .01ms; }
+  .mandelbrot-ready .mandelbrot-background { animation-duration: .01ms; }
 }
 
 a {
@@ -179,6 +182,33 @@ main {
   width: 100%;
   height: 100%;
   background: #fafaf8;
+}
+
+.mandelbrot-generating .mandelbrot-background {
+  opacity: 0;
+}
+
+.mandelbrot-ready .mandelbrot-background {
+  animation: mandelbrot-fade-in .8s ease-out both;
+}
+
+@keyframes mandelbrot-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fractal-details {
+  position: absolute;
+  z-index: 2;
+  top: 22px;
+  right: 4.9%;
+  margin: 0;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: .14em;
+  text-align: right;
+  text-transform: uppercase;
 }
 
 .hero > :not(.mandelbrot-background) {
