@@ -13,6 +13,7 @@ if (!ctx) {
 const maxIterations = 500;
 const MAX_DEVICE_PIXEL_RATIO = 2;
 const MAX_RENDER_PIXELS = 2_000_000;
+const GRAIN_STRENGTH = 12;
 
 let renderId = 0;
 let resizeTimer: ReturnType<typeof setTimeout> | undefined;
@@ -181,6 +182,19 @@ function getSmoothGrayscale(iterations, magnitudeSquared) {
     return Math.round(255 * (1 - Math.sqrt(normalized)));
 }
 
+/**
+ * Add stable, fine monochrome grain to the completed image. Keeping the noise
+ * tied to pixel coordinates gives the canvas the texture of the gradient
+ * scenes without introducing distracting animation or shimmer.
+ */
+function getGrainedBrightness(brightness: number, x: number, y: number) {
+    let hash = Math.imul(x + 1, 1597334677) ^ Math.imul(y + 1, 3812015801);
+    hash = Math.imul(hash ^ (hash >>> 16), 2246822507);
+    const noise = ((hash >>> 0) / 4294967295) * 2 - 1;
+
+    return Math.round(Math.max(0, Math.min(255, brightness + noise * GRAIN_STRENGTH)));
+}
+
 function resizeDrawingBuffer() {
     const bounds = canvas.getBoundingClientRect();
     const pixelRatio = Math.min(window.devicePixelRatio || 1, MAX_DEVICE_PIXEL_RATIO);
@@ -240,7 +254,11 @@ function renderMandelbrot() {
             lastReal = cReal;
             lastImaginary = cImaginary;
             const result = mandelbrotIterations(cReal, cImaginary);
-            const brightness = getSmoothGrayscale(result.iterations, result.magnitudeSquared);
+            const brightness = getGrainedBrightness(
+                getSmoothGrayscale(result.iterations, result.magnitudeSquared),
+                x,
+                y
+            );
             const pixelIndex = pixel * 4;
 
             image.data[pixelIndex] = brightness;
