@@ -21,16 +21,18 @@ body {
 }
 
 .hero-copy.is-hidden {
-  visibility: hidden;
   opacity: 0;
+  pointer-events: none;
 }
 
 .fractal-progress {
   position: absolute;
   z-index: 3;
-  left: 4.9%;
-  bottom: 38px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: min(300px, 42vw);
+  text-align: center;
   transition: opacity .45s ease, visibility .45s ease;
 }
 
@@ -51,11 +53,43 @@ body {
 
 .mandelbrot-ready .fractal-progress {
   opacity: 0;
-  visibility: hidden;
+  pointer-events: none;
+}
+
+.mandelbrot-generating .fractal-progress,
+.mandelbrot-generating .fractal-console {
+  animation: hero-text-fade-in .35s ease-out both;
+}
+
+.mandelbrot-ready .fractal-progress,
+.mandelbrot-ready .fractal-console {
+  animation: hero-text-fade-out .35s ease-in both;
+}
+
+.mandelbrot-generating .fractal-details,
+.mandelbrot-generating .slider {
+  animation: hero-text-fade-out .3s ease-in both;
+}
+
+.mandelbrot-ready .fractal-details,
+.mandelbrot-ready .slider {
+  animation: hero-text-fade-in .65s .15s ease-out both;
+}
+
+@keyframes hero-text-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes hero-text-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hero-copy,.fractal-progress,.fractal-progress span { transition-duration: .01ms; }
+  .mandelbrot-ready .mandelbrot-background { animation-duration: .01ms; }
+  .hero-copy,.fractal-details,.fractal-console,.fractal-progress,.slider { animation-duration: .01ms !important; }
 }
 
 a {
@@ -168,7 +202,6 @@ main {
   min-height: 0;
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid #ccc;
 }
 
 .mandelbrot-background {
@@ -179,6 +212,37 @@ main {
   width: 100%;
   height: 100%;
   background: #fafaf8;
+}
+
+.mandelbrot-generating .mandelbrot-background {
+  opacity: 0;
+}
+
+.mandelbrot-ready .mandelbrot-background {
+  animation: mandelbrot-fade-in .8s ease-out both;
+}
+
+@keyframes mandelbrot-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fractal-details {
+  position: absolute;
+  z-index: 2;
+  top: 22px;
+  right: 4.9%;
+  margin: 0;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: .14em;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.fractal-console {
+  display: none;
 }
 
 .hero > :not(.mandelbrot-background) {
@@ -219,6 +283,57 @@ main {
   z-index: 2;
   left: 19.5%;
   top: 130px;
+}
+
+@media (min-width: 901px) {
+  .fractal-console {
+    position: absolute;
+    z-index: 2;
+    top: 52px;
+    right: 4.9%;
+    display: block;
+    width: 310px;
+    height: 152px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    color: #111;
+    font: 9px/1.55 "Courier New", monospace;
+    letter-spacing: .08em;
+    text-align: left;
+    text-shadow: none;
+  }
+
+  .fractal-details {
+    top: 22px;
+  }
+
+  .hero-copy {
+    left: 10%;
+    top: 50%;
+    width: min(560px, 42vw);
+    transform: translateY(-50%);
+  }
+
+  .hero-copy h1 {
+    line-height: .94;
+  }
+
+  .hero-copy p {
+    margin-top: 38px;
+    margin-bottom: 38px;
+  }
+
+  .hero-copy .pill {
+    width: 100%;
+    margin-left: 0;
+    border-radius: 0;
+  }
+}
+
+.mandelbrot-ready .fractal-console {
+  pointer-events: none;
 }
 
 [data-adaptive-contrast] {
