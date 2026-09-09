@@ -11,26 +11,28 @@ export default defineConfig({
 	integrations: [mdx(), react(), sitemap()],
 	fonts: [
 		{
-			provider: fontProviders.local(),
-			name: 'Atkinson',
-			cssVariable: '--font-atkinson',
-			fallbacks: ['sans-serif'],
-			options: {
-				variants: [
-					{
-						src: ['./src/assets/fonts/atkinson-regular.woff'],
-						weight: 400,
-						style: 'normal',
-						display: 'swap',
-					},
-					{
-						src: ['./src/assets/fonts/atkinson-bold.woff'],
-						weight: 700,
-						style: 'normal',
-						display: 'swap',
-					},
-				],
-			},
+			provider: fontProviders.google(),
+			name: 'EB Garamond',
+			cssVariable: '--font-editorial',
+			fallbacks: ['Georgia', 'serif'],
+			weights: [400, 700],
+			styles: ['normal'],
+		},
+		{
+			provider: fontProviders.google(),
+			name: 'IBM Plex Mono',
+			cssVariable: '--font-mono',
+			fallbacks: ['Courier New', 'monospace'],
+			weights: [400, 700],
+			styles: ['normal'],
+		},
+		{
+			provider: fontProviders.google(),
+			name: 'Inter',
+			cssVariable: '--font-ui',
+			fallbacks: ['Arial', 'sans-serif'],
+			weights: [400, 600, 700],
+			styles: ['normal'],
 		},
 	],
 });

@@ -20,7 +20,7 @@ html {
 	background: #111;
 }
 body {
-	font-family: var(--font-atkinson);
+	font-family: var(--font-ui);
 	margin: 0;
 	padding: 0;
 	text-align: left;
@@ -76,6 +76,7 @@ h3,
 h4,
 h5,
 h6 {
+	font-family: var(--font-editorial);
 	margin: 0 0 0.5rem 0;
 	color: rgb(var(--black));
 	line-height: 1.2;
@@ -131,6 +132,7 @@ img {
 	border-radius: 8px;
 }
 code {
+	font-family: var(--font-mono);
 	padding: 2px 5px;
 	background-color: rgb(var(--gray-light));
 	border-radius: 2px;

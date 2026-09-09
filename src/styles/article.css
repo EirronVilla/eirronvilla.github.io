@@ -60,7 +60,7 @@
 .index-heading h1 {
   max-width: 900px;
   margin: 0 auto;
-  font: 76px/.95 Georgia, serif;
+  font: 76px/.95 var(--font-editorial);
   letter-spacing: -.055em;
   color: #fff;
 }
@@ -68,10 +68,11 @@
 .article-heading .dek {
   max-width: 620px;
   margin: 24px auto 18px;
-  font: 20px/1.5 Georgia, serif
+  font: 20px/1.5 var(--font-mono)
 }
 
 .date {
+  font-family: var(--font-mono);
   color: #555;
   font-size: 12px;
   text-transform: uppercase;
@@ -98,7 +99,7 @@
   max-width: calc(100% - 40px);
   margin: 0 auto;
   padding: 56px 0 76px;
-  font: 18px/1.75 Arial, sans-serif
+  font: 18px/1.75 var(--font-ui)
 }
 
 .prose h1,
@@ -107,7 +108,7 @@
 .prose h4,
 .prose h5,
 .prose h6 {
-  font-family: Georgia, serif;
+  font-family: var(--font-editorial);
   letter-spacing: -.025em
 }
 
@@ -131,7 +132,7 @@
   margin: 2em 0;
   padding: 8px 0 8px 28px;
   border-left: 2px solid #111;
-  font: 24px/1.5 Georgia, serif
+  font: 24px/1.5 var(--font-editorial)
 }
 
 .prose pre {
@@ -191,7 +192,7 @@
 
 .post-grid h2 {
   margin: 0 0 8px;
-  font: 29px/1.05 Georgia, serif;
+  font: 29px/1.05 var(--font-editorial);
   letter-spacing: -.03em
 }
 
@@ -204,6 +205,7 @@
 }
 
 .post-grid span {
+  font-family: var(--font-ui);
   display: inline-block;
   border-bottom: 1px solid;
   font-size: 13px
@@ -377,6 +379,7 @@
 }
 
 .reading-progress p {
+  font-family: var(--font-mono);
   margin: 9px 0 0;
   font-size: 10px;
   font-weight: 700;
