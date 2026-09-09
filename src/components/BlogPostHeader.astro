@@ -1,0 +1,29 @@
+---
+import FormattedDate from './FormattedDate.astro';
+import ShaderGradient, { type ShaderGradientConfig } from './ShaderGradient';
+
+interface Props {
+	title: string;
+	description: string;
+	pubDate: Date;
+	updatedDate?: Date;
+	gradient?: Partial<ShaderGradientConfig>;
+}
+
+const { title, description, pubDate, updatedDate, gradient = {} } = Astro.props;
+---
+
+<header class="article-heading">
+	<div class="article-heading-gradient" aria-hidden="true">
+		<ShaderGradient client:only="react" config={gradient} />
+	</div>
+	<div class="article-heading-content">
+		<p class="label">Blog post</p>
+		<h1>{title}</h1>
+		<p class="dek">{description}</p>
+		<div class="date">
+			<FormattedDate date={pubDate} />
+			{updatedDate && <span> / Actualizado el <FormattedDate date={updatedDate} /></span>}
+		</div>
+	</div>
+</header>

@@ -3,11 +3,45 @@ title: "¿Qué es esto?"
 description: "¿Qué es este espacio? ¿Qué deseo lograr con él?."
 author: "Aaron Villalobos"
 pubDate: 2026-09-05
+shaderGradient:
+  animate: "on"
+  brightness: 1.2
+  cAzimuthAngle: 180
+  cDistance: 3.6
+  cPolarAngle: 90
+  cameraZoom: 1
+  color1: "#fdfcff"
+  color2: "#474b4c"
+  color3: "#afb1b0"
+  envPreset: "city"
+  fov: 45
+  grain: "on"
+  lightType: "3d"
+  pixelDensity: 1
+  positionX: -1.4
+  positionY: 0
+  positionZ: 0
+  range: "disabled"
+  rangeEnd: 40
+  rangeStart: 0
+  reflection: 0.1
+  rotationX: 0
+  rotationY: 10
+  rotationZ: 50
+  shader: "defaults"
+  type: "plane"
+  uAmplitude: 1
+  uDensity: 1.3
+  uFrequency: 5.5
+  uSpeed: 0.4
+  uStrength: 4
+  uTime: 0
+  wireframe: false
 ---
 
-# ¿Qué es esto?
+# ¡Hola!
 
-Hola. Bienvenido a mi espacio para explorar y aprender cosas nuevas e interesantes.
+Bienvenido a mi espacio para explorar y aprender cosas nuevas e interesantes.
 
 Mi nombre es Aaron Villalobos. Soy de Costa Rica y soy Ingeniero en Sistemas de Información de la Universidad Nacional.
 
