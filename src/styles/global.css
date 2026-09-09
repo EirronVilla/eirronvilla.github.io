@@ -29,6 +29,38 @@ body {
 	font-size: 20px;
 	line-height: 1.7;
 }
+
+body > main,
+body > .site-footer {
+	animation: site-view-enter 560ms ease-out both;
+}
+
+body > main {
+	animation-delay: 45ms;
+}
+
+body > .site-footer {
+	animation-delay: 90ms;
+}
+
+@keyframes site-view-enter {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body > main,
+	body > .site-footer {
+		animation-duration: .01ms;
+		animation-delay: 0s;
+	}
+}
+
 main {
 	width: 720px;
 	max-width: calc(100% - 2em);
