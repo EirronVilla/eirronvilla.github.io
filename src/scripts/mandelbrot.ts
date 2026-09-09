@@ -68,6 +68,42 @@ function updateVisualizationDetails() {
     details.textContent = `Profundidad ${formattedZoom}× · Área x ${visualizationArea.centerReal.toFixed(coordinatePrecision)}, y ${visualizationArea.centerImaginary.toFixed(coordinatePrecision)}`;
 }
 
+let fractalConsoleLines: string[] = [];
+
+function renderFractalConsole() {
+    const consoleElement = document.querySelector<HTMLElement>("#fractal-console");
+    if (!consoleElement) return;
+
+    consoleElement.textContent = fractalConsoleLines.join("\n");
+    consoleElement.scrollTop = consoleElement.scrollHeight;
+}
+
+function resetFractalConsole(totalPixels: number, width: number, height: number) {
+    fractalConsoleLines = [
+        "> MANDELBROT_RENDER",
+        `  BUFFER ${width} x ${height}`,
+        `  LIMIT  ${maxIterations} ITERATIONS`,
+        `  QUEUE  ${new Intl.NumberFormat("en-US").format(totalPixels)} POINTS`,
+        "  STARTING CALCULATION..."
+    ];
+    renderFractalConsole();
+}
+
+function appendFractalConsole(
+    percentage: number,
+    completedPixels: number,
+    totalPixels: number,
+    cReal = visualizationArea.centerReal,
+    cImaginary = visualizationArea.centerImaginary
+) {
+    const numberFormat = new Intl.NumberFormat("en-US");
+    fractalConsoleLines.push(
+        `[${String(percentage).padStart(3, " ")}%] ${numberFormat.format(completedPixels)} / ${numberFormat.format(totalPixels)}`,
+        `        C ${cReal.toFixed(9)} ${cImaginary < 0 ? "-" : "+"} ${Math.abs(cImaginary).toFixed(9)}i`
+    );
+    renderFractalConsole();
+}
+
 function updateAdaptiveContrast(image: ImageData) {
     const canvasBounds = canvas.getBoundingClientRect();
     if (!canvasBounds.width || !canvasBounds.height) return;
@@ -186,6 +222,10 @@ function renderMandelbrot() {
 
     let completedPixels = 0;
     let lastProgressUpdate = 0;
+    let lastConsolePercentage = -5;
+    let lastReal = visualizationArea.centerReal;
+    let lastImaginary = visualizationArea.centerImaginary;
+    resetFractalConsole(totalPixels, width, height);
 
     function renderParticles(timestamp: number) {
         if (currentRenderId !== renderId) return;
@@ -197,6 +237,8 @@ function renderMandelbrot() {
             const y = Math.floor(pixel / width);
             const cReal = minReal + (x / width) * spanReal;
             const cImaginary = maxImaginary - (y / height) * spanImaginary;
+            lastReal = cReal;
+            lastImaginary = cImaginary;
             const result = mandelbrotIterations(cReal, cImaginary);
             const brightness = getSmoothGrayscale(result.iterations, result.magnitudeSquared);
             const pixelIndex = pixel * 4;
@@ -209,8 +251,12 @@ function renderMandelbrot() {
 
         if (timestamp - lastProgressUpdate > 80 || completedPixels === totalPixels) {
             lastProgressUpdate = timestamp;
+            const percentage = Math.round((completedPixels / totalPixels) * 100);
+            if (percentage >= lastConsolePercentage + 5 || completedPixels === totalPixels) {
+                appendFractalConsole(percentage, completedPixels, totalPixels, lastReal, lastImaginary);
+                lastConsolePercentage = percentage;
+            }
             if (!initialRenderComplete && progress) {
-                const percentage = Math.round((completedPixels / totalPixels) * 100);
                 progress.style.setProperty("--fractal-progress", `${percentage}%`);
                 if (progressLabel) progressLabel.textContent = `${percentage}%`;
             }
