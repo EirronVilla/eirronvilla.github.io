@@ -31,16 +31,15 @@
 		const percentage = article
 			? Math.round(Math.min(1, Math.max(0, (window.scrollY - articleTop) / readingDistance)) * 100)
 			: 100;
-		const restingBottom = Number.parseFloat(getComputedStyle(progress).bottom) || 0;
-		const footerBoundary = footer
-			? window.innerHeight - restingBottom - footer.getBoundingClientRect().top
-			: 0;
-		const footerOverlap = footerBoundary > 0 ? footerBoundary + 10 : 0;
-
 		progress.style.setProperty('--reading-progress', `${percentage}%`);
-		progress.style.setProperty('--footer-overlap', `${footerOverlap}px`);
 		progress.setAttribute('aria-valuenow', String(percentage));
 		if (label) label.textContent = `${percentage}%`;
+	}
+
+	function updateFooterHeight() {
+		if (progress && footer) {
+			progress.style.setProperty('--footer-height', `${footer.offsetHeight}px`);
+		}
 	}
 
 	function requestProgressUpdate() {
@@ -48,6 +47,17 @@
 	}
 
 	window.addEventListener('scroll', requestProgressUpdate, { passive: true });
-	window.addEventListener('resize', requestProgressUpdate);
+	const footerObserver = footer && progress
+		? new IntersectionObserver(([entry]) => {
+			progress.classList.toggle('is-before-footer', entry.isIntersecting);
+		}, { rootMargin: '0px 0px 10px 0px' })
+		: null;
+
+	if (footer && footerObserver) footerObserver.observe(footer);
+	window.addEventListener('resize', () => {
+		updateFooterHeight();
+		requestProgressUpdate();
+	});
+	updateFooterHeight();
 	updateReadingProgress();
 </script>

@@ -2,6 +2,10 @@
   position: static
 }
 
+.article-body {
+  position: relative;
+}
+
 .article-page,
 .blog-index {
   width: 100%;
@@ -358,7 +362,11 @@
   padding: 10px 12px;
   background: #fafaf8;
   color: #111;
-  transform: translateY(calc(-1 * var(--footer-overlap, 0px)));
+}
+
+.reading-progress.is-before-footer {
+  position: absolute;
+  bottom: calc(var(--footer-height, 0px) + 10px);
 }
 
 .reading-progress>span {
