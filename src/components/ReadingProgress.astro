@@ -1,0 +1,53 @@
+<div
+	class="reading-progress"
+	role="progressbar"
+	aria-label="Progreso de lectura"
+	aria-valuemin="0"
+	aria-valuemax="100"
+	aria-valuenow="0"
+>
+	<span aria-hidden="true"></span>
+	<p>Progreso de lectura / <b>0%</b></p>
+</div>
+
+<script>
+	const progress = document.querySelector<HTMLElement>('.reading-progress');
+	const label = progress?.querySelector<HTMLElement>('b');
+	const article = document.querySelector<HTMLElement>('.article-page article');
+	const footer = document.querySelector<HTMLElement>('.site-footer');
+	let frame = 0;
+
+	function updateReadingProgress() {
+		frame = 0;
+		if (!progress) return;
+
+		const articleTop = article
+			? article.getBoundingClientRect().top + window.scrollY
+			: 0;
+		const articleBottom = article
+			? article.getBoundingClientRect().bottom + window.scrollY
+			: document.documentElement.scrollHeight;
+		const readingDistance = Math.max(1, articleBottom - window.innerHeight - articleTop);
+		const percentage = article
+			? Math.round(Math.min(1, Math.max(0, (window.scrollY - articleTop) / readingDistance)) * 100)
+			: 100;
+		const restingBottom = Number.parseFloat(getComputedStyle(progress).bottom) || 0;
+		const footerBoundary = footer
+			? window.innerHeight - restingBottom - footer.getBoundingClientRect().top
+			: 0;
+		const footerOverlap = footerBoundary > 0 ? footerBoundary + 10 : 0;
+
+		progress.style.setProperty('--reading-progress', `${percentage}%`);
+		progress.style.setProperty('--footer-overlap', `${footerOverlap}px`);
+		progress.setAttribute('aria-valuenow', String(percentage));
+		if (label) label.textContent = `${percentage}%`;
+	}
+
+	function requestProgressUpdate() {
+		if (!frame) frame = requestAnimationFrame(updateReadingProgress);
+	}
+
+	window.addEventListener('scroll', requestProgressUpdate, { passive: true });
+	window.addEventListener('resize', requestProgressUpdate);
+	updateReadingProgress();
+</script>

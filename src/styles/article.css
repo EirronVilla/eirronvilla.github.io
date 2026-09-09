@@ -348,3 +348,47 @@
     animation-delay: 0s;
   }
 }
+
+.reading-progress {
+  position: fixed;
+  z-index: 900;
+  left: 4.9%;
+  bottom: 0;
+  width: min(300px, 42vw);
+  padding: 10px 12px;
+  background: #fafaf8;
+  color: #111;
+  transform: translateY(calc(-1 * var(--footer-overlap, 0px)));
+}
+
+.reading-progress>span {
+  display: block;
+  width: var(--reading-progress, 0%);
+  border-top: 2px solid #111;
+  transition: width .18s ease-out;
+}
+
+.reading-progress p {
+  margin: 9px 0 0;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 620px) {
+  .reading-progress {
+    right: 20px;
+    bottom: 0;
+    left: 20px;
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-progress>span {
+    transition-duration: .01ms;
+  }
+
+}
