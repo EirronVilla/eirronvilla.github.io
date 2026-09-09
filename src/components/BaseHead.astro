@@ -22,7 +22,7 @@ const socialImageURL = new URL(image.src, Astro.url);
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta id="adaptive-theme-color" name="theme-color" content="#fafaf8" />
+<meta name="theme-color" content="#111" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap-index.xml" />
@@ -36,35 +36,6 @@ const socialImageURL = new URL(image.src, Astro.url);
 
 <Font cssVariable="--font-atkinson" preload />
 
-<script is:inline>
-	(() => {
-		const DARK_SECTIONS = '.site-header, .site-footer, .article-heading, .index-heading-gradient';
-		let frame = 0;
-
-		function updateBrowserTheme() {
-			frame = 0;
-			const theme = document.querySelector('#adaptive-theme-color');
-			const visibleElement = document.elementFromPoint(
-				window.innerWidth / 2,
-				window.innerHeight / 2,
-			);
-			const color = visibleElement?.closest(DARK_SECTIONS) ? '#000000' : '#fafaf8';
-
-			if (theme?.getAttribute('content') !== color) {
-				theme?.setAttribute('content', color);
-				document.documentElement.style.backgroundColor = color;
-			}
-		}
-
-		function requestThemeUpdate() {
-			if (!frame) frame = requestAnimationFrame(updateBrowserTheme);
-		}
-
-		window.addEventListener('scroll', requestThemeUpdate, { passive: true });
-		window.addEventListener('resize', requestThemeUpdate);
-		document.addEventListener('DOMContentLoaded', updateBrowserTheme, { once: true });
-	})();
-</script>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
